@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>全科住培 · AI 提示词</title>
+<style>
+  :root { --g9: #174d26; --g7: #2b7a3c; --g6: #3d8d48; --g1: #e4f2df; --g0: #f3f9f0; --ink: #1b2a20; --ink2: #44554a; --mute: #7b8a80; --line: #d9e5d6; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--g0); color: var(--ink); line-height: 1.6; padding: 0 16px 40px; }
+  header { margin: 0 -16px 16px; padding: 22px 20px 18px; background: linear-gradient(135deg, var(--g9), var(--g6)); color: #fff; }
+  header h1 { font-size: 21px; } header p { font-size: 13px; opacity: .85; margin-top: 4px; }
+  section { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(23,77,38,.06); }
+  h2 { font-size: 16px; color: var(--g7); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  h2 i { font-style: normal; background: var(--g6); color: #fff; border-radius: 6px; padding: 0 7px; font-size: 13px; }
+  .txt { font-size: 15px; background: var(--g0); border: 1px dashed #b9dbb0; border-radius: 10px; padding: 12px; user-select: text; -webkit-user-select: text; white-space: pre-wrap; }
+  .copy { width: 100%; margin-top: 10px; padding: 12px; border: 0; border-radius: 10px; background: var(--g6); color: #fff; font-size: 16px; font-weight: 700; }
+  .copy:active { background: var(--g9); }
+  .slot { margin-bottom: 8px; } .slot b { font-size: 13px; color: var(--mute); display: block; margin-bottom: 4px; }
+  .slot div { display: flex; flex-wrap: wrap; gap: 6px; }
+  .slot button { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 6px 9px; font-size: 13px; text-align: left; color: var(--ink2); }
+  .slot button.on { border-color: var(--g6); background: var(--g1); color: var(--g9); font-weight: 700; }
+  .tip { font-size: 13px; color: var(--ink2); }
+  .warn { background: #fdecea; color: #9b2a20; border-radius: 12px; padding: 12px 14px; font-size: 14px; font-weight: 700; text-align: center; }
+  #toast { white-space: nowrap; position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%); background: rgba(23,77,38,.92); color: #fff; padding: 10px 22px; border-radius: 999px; font-size: 15px; opacity: 0; transition: opacity .3s; pointer-events: none; }
+  #toast.show { opacity: 1; }
+  #survey { display: none; } #survey a { display: block; text-align: center; padding: 12px; border-radius: 10px; background: #e89a0c; color: #fff; font-weight: 700; text-decoration: none; }
+  footer { text-align: center; font-size: 12px; color: var(--mute); margin-top: 18px; }
+</style>
+</head>
+<body>
+<header><h1>全科住培 · AI 提示词</h1><p>全科住院医师规范化培训课程设计和授课技巧 · 课堂配套页</p></header>
+
+<section>
+  <h2><i>1</i>本次课现场组装的提示词</h2>
+  <div class="txt" id="main"></div>
+  <button class="copy" data-target="main">复制这段提示词</button>
+  <p class="tip" style="margin-top:10px">复制后打开豆包、Kimi、DeepSeek、文心一言等，长按输入框粘贴发送即可。也可以在下面换一换选项：</p>
+  <div id="slots" style="margin-top:10px"></div>
+</section>
+
+<section>
+  <h2><i>2</i>提示词万能公式</h2>
+  <p class="tip" style="margin-bottom:8px">角色 + 受众 + 目标 + 限制条件 + 输出格式</p>
+  <div class="txt" id="formula"></div>
+  <button class="copy" data-target="formula">复制示例</button>
+</section>
+
+<section>
+  <h2><i>3</i>更多常用模板</h2>
+  <div id="extra"></div>
+</section>
+
+<section id="survey"><h2><i>✓</i>课后问卷（约 5 分钟）</h2><a id="surveyLink" href="#">填写课程反馈问卷</a></section>
+
+<div class="warn">AI 是秘书，您才是主编：临床准确性必须由您把关</div>
+<footer>大连市中心医院 · 匠者功成 大医心诚</footer>
+<div id="toast">已复制，去 AI 工具里粘贴吧</div>
+
+<script>
+const D = {"slots":[{"k":"角色","o":["你是一名有 10 年带教经验的全科医学带教老师","你是一名医学教育专家"]},{"k":"受众","o":["给全科住培二年级学员练习用","给住培一年级学员练习用"]},{"k":"目标","o":["写一个门诊角色扮演脚本，场景是“2 型糖尿病患者拒绝打胰岛素”","写一个角色扮演脚本：患者担心“打上胰岛素就停不下来”而拒绝"]},{"k":"限制条件","o":["医生要先共情、再解释、最后给出可选方案；不超过 8 轮对话；给观察员留 2 个观察要点","患者要固执但讲道理；时长 3 分钟；结尾不要让患者轻易同意"]},{"k":"输出格式","o":["按“剧本—角色说明—观察员记录表”三段输出","用表格输出：轮次、说话人、台词、沟通技巧"]}],"formula":"你是一名全科医学教授，请为住培一年级学员，设计 3 道关于高血压用药选择的单选题，要求必须包含一道易错题，并用表格输出题目、选项和解析。","extra":[{"t":"生成教学病例","x":"你是一名全科医学带教老师，请为住培二年级学员编写一个社区门诊“头晕”教学病例，要求包含多病共存和社会心理因素，信息分 4 段逐步给出，每段后附 1 个讨论问题，用编号列表输出。"},{"t":"写患者科普","x":"你是一名社区全科医生，请为 60 岁以上、文化程度不高的高血压患者写一篇 300 字以内的科普短文，主题是“为什么不能自己停药”，语言通俗、不用专业术语，最后给出 3 条可执行的小建议。"},{"t":"列小讲课 PPT 大纲","x":"你是一名医学教育专家，请为全科住培一年级学员设计“低血糖的识别与处理”20 分钟小讲课的 PPT 大纲，按 BOPPPS 结构（导入、目标、前测、参与式学习、后测、总结）分页列出，每页不超过 3 个要点。"}]};
+const SURVEY_URL = ''; // 问卷星链接生成后填在这里
+const $ = (id) => document.getElementById(id);
+const q = new URLSearchParams(location.search).get('p') || '';
+const pick = D.slots.map((s, i) => Math.min(s.o.length - 1, +(q[i] || 0) || 0));
+function paint() {
+  $('main').textContent = D.slots.map((s, i) => s.o[pick[i]]).join('，') + '。';
+  $('slots').innerHTML = D.slots.map((s, i) => '<div class="slot"><b>' + s.k + '</b><div>' +
+    s.o.map((o, j) => '<button data-i="' + i + '" data-j="' + j + '" class="' + (pick[i] === j ? 'on' : '') + '">' + o + '</button>').join('') + '</div></div>').join('');
+  $('slots').querySelectorAll('button').forEach((b) => { b.onclick = () => { pick[+b.dataset.i] = +b.dataset.j; paint(); }; });
+}
+paint();
+$('formula').textContent = D.formula;
+$('extra').innerHTML = D.extra.map((e, i) => '<p style="font-weight:700;margin:6px 0">' + e.t + '</p><div class="txt" id="ex' + i + '">' + e.x + '</div><button class="copy" data-target="ex' + i + '">复制</button>').join('<div style="height:12px"></div>');
+if (SURVEY_URL) { $('survey').style.display = 'block'; $('surveyLink').href = SURVEY_URL; }
+function toast() { const t = $('toast'); t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+  document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+  let ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  document.body.removeChild(ta); return ok;
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('.copy'); if (!b) return;
+  const text = $(b.dataset.target).textContent;
+  if (fallbackCopy(text)) { toast(); return; }
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(toast, () => alert('请长按上方文字手动复制'));
+  else alert('请长按上方文字手动复制');
+});
+</script>
+</body>
+</html>
